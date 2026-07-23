@@ -24,20 +24,14 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=10000
 ENV HOSTNAME="0.0.0.0"
 
-# Install cloudflared binary inside Docker container
-RUN apk add --no-cache curl ca-certificates && \
-    curl -L -o /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && \
-    chmod +x /usr/local/bin/cloudflared
+
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/tunnel.sh ./tunnel.sh
-COPY --from=builder /app/start.sh ./start.sh
 
-RUN chmod +x ./tunnel.sh ./start.sh
 
 EXPOSE 10000
 
-CMD ["./start.sh"]
+CMD ["npm", "run", "start"]
