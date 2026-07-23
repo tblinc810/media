@@ -528,7 +528,13 @@ const App = () => {
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} defaultIsLogin={authModalIsLogin} />
 
       {/* Sidebar */}
-      <aside className={`sidebar${sidebarCollapsed ? ' collapsed' : ''}`}>
+      <aside
+        className={`sidebar${sidebarCollapsed ? ' collapsed' : ''}${sidebarCollapsed === false && typeof window !== 'undefined' && window.innerWidth <= 768 ? ' mobile-open' : ''}`}
+        onClick={(e) => {
+          // Close sidebar if clicked outside on mobile
+          if (e.target === e.currentTarget) setSidebarCollapsed(true);
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: sidebarCollapsed ? 'center' : 'space-between', marginBottom: '0.5rem' }}>
           <div className="sidebar-brand">
             <Film size={28} color="var(--accent-color)" style={{ flexShrink: 0 }} />
@@ -585,7 +591,7 @@ const App = () => {
               <Menu size={20} />
             </button>
             <div className="search-bar" style={{ width: '100%', maxWidth: '300px' }}>
-              <Search size={18} color="var(--text-secondary)" />
+              <Search className="search-icon" size={16} color="var(--text-secondary)" />
               <input
                 type="text"
                 placeholder="Search movies..."
@@ -678,6 +684,7 @@ const App = () => {
                   Log In
                 </button>
                 <button
+                  className="hide-on-mobile"
                   onClick={() => { setAuthModalIsLogin(false); setAuthModalOpen(true); }}
                   style={{ background: 'var(--accent-color)', border: 'none', color: '#fff', fontWeight: 600, cursor: 'pointer', padding: '0.5rem 1.25rem', borderRadius: '50px', boxShadow: '0 4px 15px rgba(59,130,246,0.4)', transition: 'all 0.2s' }}
                 >

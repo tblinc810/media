@@ -312,11 +312,42 @@ a:hover {
   display: none;
 }
 
+/* ── Hide on mobile ── */
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+}
+
 /* ── Responsive breakpoints ─────────────────────────────── */
 @media (max-width: 768px) {
-  /* Hide sidebar on mobile */
+  /* Sidebar hidden by default, slides in as drawer when open */
   .sidebar {
-    display: none;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    width: 260px !important;
+  }
+
+  /* When sidebar is NOT collapsed → show as drawer on mobile */
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+  }
+
+  /* Dim overlay behind open drawer */
+  .sidebar:not(.collapsed)::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+    backdrop-filter: blur(2px);
   }
 
   /* Full-width main */
