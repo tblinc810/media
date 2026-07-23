@@ -392,6 +392,7 @@ const App = () => {
   const [error, setError] = useState(null);
   const [currentMovie, setCurrentMovie] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [theme, setTheme] = useState(() => typeof window !== "undefined" ? localStorage.getItem('theme') || 'dark' : 'dark');
   const [showNotifications, setShowNotifications] = useState(false);
@@ -528,13 +529,17 @@ const App = () => {
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} defaultIsLogin={authModalIsLogin} />
 
       {/* Sidebar */}
-      <aside
-        className={`sidebar${sidebarCollapsed ? ' collapsed' : ''}${sidebarCollapsed === false && typeof window !== 'undefined' && window.innerWidth <= 768 ? ' mobile-open' : ''}`}
-        onClick={(e) => {
-          // Close sidebar if clicked outside on mobile
-          if (e.target === e.currentTarget) setSidebarCollapsed(true);
-        }}
-      >
+      {/* Mobile overlay — close drawer on tap */}
+      {mobileNavOpen && (
+        <div
+          onClick={() => setMobileNavOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)',
+            backdropFilter: 'blur(3px)', zIndex: 199
+          }}
+        />
+      )}
+      <aside className={`sidebar${sidebarCollapsed ? ' collapsed' : ''}${mobileNavOpen ? ' mobile-open' : ''}`}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: sidebarCollapsed ? 'center' : 'space-between', marginBottom: '0.5rem' }}>
           <div className="sidebar-brand">
             <Film size={28} color="var(--accent-color)" style={{ flexShrink: 0 }} />
@@ -556,7 +561,7 @@ const App = () => {
               <div
                 key={lib.path}
                 className={`sidebar-link${isActive ? ' active' : ''}`}
-                onClick={() => handleLibraryChange(lib.path)}
+                onClick={() => { handleLibraryChange(lib.path); setMobileNavOpen(false); }}
                 title={sidebarCollapsed ? lib.label : ''}
                 style={{
                   fontSize: '0.82rem',
@@ -587,7 +592,18 @@ const App = () => {
         <nav className="navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Left: Sidebar toggle and Search */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: 1 }}>
-            <button className="toggle-btn" onClick={() => setSidebarCollapsed(prev => !prev)} title="Toggle Sidebar">
+            <button
+              className="toggle-btn"
+              onClick={() => {
+                // On mobile: toggle drawer; on desktop: collapse sidebar
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  setMobileNavOpen(prev => !prev);
+                } else {
+                  setSidebarCollapsed(prev => !prev);
+                }
+              }}
+              title="Toggle Sidebar"
+            >
               <Menu size={20} />
             </button>
             <div className="search-bar" style={{ width: '100%', maxWidth: '300px' }}>
