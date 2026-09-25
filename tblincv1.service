@@ -1,0 +1,22 @@
+[Unit]
+Description=tblinc v1 Media App
+Documentation=https://github.com/tblinc/media
+After=network.target
+
+[Service]
+Type=simple
+User=v1
+WorkingDirectory=/opt/tblincv1
+ExecStart=/home/v1/.nvm/versions/node/v24.21.0/bin/node /opt/tblincv1/server.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tblincv1
+Environment=NODE_ENV=production
+Environment=PATH=/home/v1/.nvm/versions/node/v24.21.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=PORT=3000
+EnvironmentFile=/opt/tblincv1/.env
+
+[Install]
+WantedBy=multi-user.target
