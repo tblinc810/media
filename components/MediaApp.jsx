@@ -2,7 +2,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Folder, Film, ChevronRight, Home, AlertCircle, Play, ArrowLeft, Search, Bell, User, Menu, LogOut, Download, Sun, Moon, MonitorPlay, Sparkles, Ghost, Video, Languages, Trophy, Tv, Clapperboard, MonitorSmartphone, Star, Gamepad2, Disc3, Globe2, LogIn, UserPlus, MoreHorizontal } from 'lucide-react';
+import { Folder, Film, ChevronRight, Home, AlertCircle, Play, ArrowLeft, Search, Bell, User, Menu, LogOut, Download, Sun, Moon, MonitorPlay, Sparkles, Ghost, Video, Languages, Trophy, Tv, Clapperboard, MonitorSmartphone, Star, LogIn, UserPlus, MoreHorizontal } from 'lucide-react';
 import { fetchDirectory, getFullUrl } from '../lib/api';
 import AuthModal from './AuthModal';
 import { auth, signOut } from '../lib/firebase';

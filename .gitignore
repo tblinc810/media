@@ -43,3 +43,8 @@ next-env.d.ts
 # cloudflared binary
 cloudflared
 *.tar.gz
+
+# electron build
+dist/
+dist-electron/
+
