@@ -48,3 +48,12 @@ cloudflared
 dist/
 dist-electron/
 
+# android (Capacitor) — generated project, open with Android Studio
+android/
+
+# next.js static export (Capacitor webDir)
+out/
+
+# android build env
+.env.android
+

@@ -10,7 +10,13 @@
     "lint": "eslint",
     "electron": "electron . --no-sandbox",
     "electron:dev": "concurrently -k \"next dev\" \"wait-on tcp:3000 && electron . --no-sandbox\"",
-    "electron:build": "next build && electron-builder"
+    "electron:prep": "node scripts/prepare-standalone.mjs",
+    "electron:build": "next build && npm run electron:prep && electron-builder",
+    "electron:build:win": "next build && npm run electron:prep && electron-builder --win",
+    "android:prep": "node scripts/prepare-android.mjs",
+    "android:sync": "npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:build": "npm run android:prep && npm run android:sync"
   },
   "build": {
     "appId": "com.tblinc.media",
@@ -18,25 +24,34 @@
     "directories": {
       "output": "dist-electron"
     },
+    "asar": true,
+    "asarUnpack": [
+      ".next/standalone/**/*"
+    ],
     "files": [
       "electron/**/*",
       ".next/standalone/**/*",
-      ".next/static/**/*",
-      "public/**/*",
       "package.json"
     ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "tblinc Media"
+    },
     "linux": {
       "target": [
         "AppImage",
         "deb"
       ],
       "category": "Video"
-    },
-    "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ]
     }
   },
   "dependencies": {
@@ -51,6 +66,9 @@
     "video.js": "^8.23.9"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

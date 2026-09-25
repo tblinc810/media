@@ -27,20 +27,39 @@ function checkServerReady(url, timeoutMs = 30000) {
   });
 }
 
-function startProductionServer() {
+function getStandaloneServerPath() {
   const rootDir = app.getAppPath();
-  const standaloneServer = path.join(rootDir, '.next', 'standalone', 'server.js');
-  const fallbackServer = path.join(rootDir, 'server.js');
+  const fs = require('fs');
+  const unpackedRoot = rootDir.replace('app.asar', 'app.asar.unpacked');
 
-  const serverFile = require('fs').existsSync(standaloneServer)
-    ? standaloneServer
-    : (require('fs').existsSync(fallbackServer) ? fallbackServer : null);
+  const candidates = [
+    path.join(unpackedRoot, '.next', 'standalone', 'server.js'),
+    path.join(rootDir, '.next', 'standalone', 'server.js'),
+    path.join(unpackedRoot, 'server.js'),
+    path.join(rootDir, 'server.js'),
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function startProductionServer() {
+  const serverFile = getStandaloneServerPath();
 
   if (serverFile) {
     console.log(`[Electron] Starting Next.js server: ${serverFile}`);
     serverProcess = spawn(process.execPath, [serverFile], {
       cwd: path.dirname(serverFile),
-      env: { ...process.env, PORT: `${PORT}`, NODE_ENV: 'production' },
+      env: {
+        ...process.env,
+        PORT: `${PORT}`,
+        NODE_ENV: 'production',
+        ELECTRON_RUN_AS_NODE: '1'
+      },
       stdio: 'inherit'
     });
 
@@ -51,6 +70,8 @@ function startProductionServer() {
     serverProcess.on('exit', (code, signal) => {
       console.log(`[Electron] Server process exited with code ${code}, signal ${signal}`);
     });
+  } else {
+    console.warn('[Electron] No server.js found to start.');
   }
 }
 
