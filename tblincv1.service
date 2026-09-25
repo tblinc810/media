@@ -15,7 +15,7 @@ StandardError=syslog
 SyslogIdentifier=tblincv1
 Environment=NODE_ENV=production
 Environment=PATH=/home/v1/.nvm/versions/node/v24.21.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-Environment=PORT=3000
+Environment=PORT=2026
 EnvironmentFile=/opt/tblincv1/.env
 
 [Install]

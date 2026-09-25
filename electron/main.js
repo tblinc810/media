@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 let mainWindow = null;
 let serverProcess = null;
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 2026;
 const SERVER_URL = `http://localhost:${PORT}`;
 const isDev = process.env.NODE_ENV !== 'production' && !app.isPackaged;
 
