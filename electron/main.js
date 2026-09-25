@@ -10,12 +10,6 @@ const PORT = process.env.PORT || 3000;
 const SERVER_URL = `http://localhost:${PORT}`;
 const isDev = process.env.NODE_ENV !== 'production' && !app.isPackaged;
 
-// Hardware acceleration and video playback flags
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture');
-app.commandLine.appendSwitch('ignore-gpu-blocklist');
-app.commandLine.appendSwitch('enable-gpu-rasterization');
-app.commandLine.appendSwitch('enable-zero-copy');
-
 function checkServerReady(url, timeoutMs = 30000) {
   return new Promise((resolve, reject) => {
     const startTime = Date.now();

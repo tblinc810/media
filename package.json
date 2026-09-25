@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "electron": "electron .",
-    "electron:dev": "concurrently -k \"next dev\" \"wait-on tcp:3000 && electron .\"",
+    "electron": "electron . --no-sandbox",
+    "electron:dev": "concurrently -k \"next dev\" \"wait-on tcp:3000 && electron . --no-sandbox\"",
     "electron:build": "next build && electron-builder"
   },
   "build": {
